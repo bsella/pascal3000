@@ -23,10 +23,9 @@ static Uint32 makeRGB(Uint8 r, Uint8 g, Uint8 b){
 	return c;
 }
 
-Palette* pltInit(SDL_Surface *s){
+Palette* pltInit(){
 	Palette* plt=malloc(sizeof(Palette));
 	plt->first=NULL;
-	plt->format=s->format;
 	return plt;
 }
 

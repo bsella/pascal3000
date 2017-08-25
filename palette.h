@@ -4,12 +4,11 @@
 
 typedef struct{
 	struct paletteColor *first;
-	SDL_PixelFormat *format;
 }Palette;
 
 int pltEmpty(Palette *plt);
 
-Palette* pltInit(SDL_Surface* s);
+Palette* pltInit();
 
 void pltAdd(Palette *p, Uint32 color, double i);
 

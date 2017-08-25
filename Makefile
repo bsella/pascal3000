@@ -1,6 +1,6 @@
 CC=gcc
 CCFLAGS=-Wall
-LDFLAGS=`sdl-config --cflags --libs` -lm
+LDFLAGS=`sdl-config --cflags --libs`
 EXE=eliPascal
 
 all: $(EXE)
@@ -9,7 +9,7 @@ all: $(EXE)
 	$(CC) $(CCFLAGS) -c $< -o $@
 
 $(EXE): pascal.o palette.o
-	$(CC) $(LDFLAGS) pascal.o palette.o -o $@
+	$(CC) $(LDFLAGS) pascal.o palette.o -o $@ -lSDL -lm
 
 clean:
 	rm *.o $(EXE)

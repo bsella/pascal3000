@@ -1,5 +1,7 @@
 #include "palette.h"
 
+/*Uint32 = [........][..RED...][.GREEN..][..BLUE..]*/
+
 struct paletteColor{
 	Uint32 clr;
 	double index;
@@ -7,19 +9,17 @@ struct paletteColor{
 };
 
 static void getRGB(Uint32 color, Uint8*r, Uint8*g, Uint8*b){
-	color>>=8;
-	*r=color;
+	*b=color;
 	color>>=8;
 	*g=color;
 	color>>=8;
-	*b=color;
+	*r=color;
 }
 
 static Uint32 makeRGB(Uint8 r, Uint8 g, Uint8 b){
-	Uint32 c=b;
+	Uint32 c=r;
 	c<<=8; c|=g;
-	c<<=8; c|=r;
-	c<<=8;
+	c<<=8; c|=b;
 	return c;
 }
 
@@ -34,11 +34,16 @@ int pltEmpty(Palette *plt){
 }
 
 void pltPrint(Palette *p){
-	for(struct paletteColor *it=p->first; it!=NULL; it=it->next)
-		printf("%f; ", it->index);
+		Uint8 r,g,b;
+	for(struct paletteColor *it=p->first; it!=NULL; it=it->next){
+		getRGB(it->clr,&r,&g,&b);
+		printf("R%x:G%x:B%x; ", r, g,b);
+	}
 	printf("\n");
+	Uint32 c=makeRGB(255,0,0);
+		getRGB(c,&r,&g,&b);
+	printf("R%x:G%x:B%x\n", r,g,b);
 }
-
 
 void pltAdd(Palette *p, Uint32 color, double i){
 	if(i<0)i=0;
@@ -46,10 +51,10 @@ void pltAdd(Palette *p, Uint32 color, double i){
 	struct paletteColor *new=malloc(sizeof(struct paletteColor));
 	new->clr=color;
 	new->index=i;
-	if(pltEmpty(p)){
+	new->next=NULL;
+	if(pltEmpty(p))
 		p->first=new;
-		p->first->next=NULL;
-	}else{
+	else{
 		if(p->first->index>i){
 			new->next=p->first;
 			p->first=new;

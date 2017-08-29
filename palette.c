@@ -29,20 +29,8 @@ Palette* pltInit(){
 	return plt;
 }
 
-int pltEmpty(Palette *plt){
-	return plt->first==NULL;
-}
-
-void pltPrint(Palette *p){
-		Uint8 r,g,b;
-	for(struct paletteColor *it=p->first; it!=NULL; it=it->next){
-		getRGB(it->clr,&r,&g,&b);
-		printf("R%x:G%x:B%x; ", r, g,b);
-	}
-	printf("\n");
-	Uint32 c=makeRGB(255,0,0);
-		getRGB(c,&r,&g,&b);
-	printf("R%x:G%x:B%x\n", r,g,b);
+int pltEmpty(Palette plt){
+	return plt.first==NULL;
 }
 
 void pltAdd(Palette *p, Uint32 color, double i){
@@ -52,7 +40,7 @@ void pltAdd(Palette *p, Uint32 color, double i){
 	new->clr=color;
 	new->index=i;
 	new->next=NULL;
-	if(pltEmpty(p))
+	if(pltEmpty(*p))
 		p->first=new;
 	else{
 		if(p->first->index>i){
@@ -79,6 +67,7 @@ static Uint32 average(struct paletteColor c1, struct paletteColor c2, double i){
 }
 
 Uint32 pltGet(Palette p, double i){
+	if(pltEmpty(p)) return 0;
 	if(i<0) return p.first->clr;
 	struct paletteColor *it=p.first;
 	while(it->next!=NULL && it->next->index<i)
@@ -95,7 +84,7 @@ static void freeFirst(Palette *p){
 }
 
 void pltFree(Palette *p){
-	while(!pltEmpty(p))
+	while(!pltEmpty(*p))
 		freeFirst(p);
 	free(p);
 }
